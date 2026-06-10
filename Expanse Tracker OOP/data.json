@@ -1,0 +1,22 @@
+[
+    {
+        "amount": 1000,
+        "category": "t-shirt",
+        "date": "10-06-2026"
+    },
+    {
+        "amount": 1500,
+        "category": "pants",
+        "date": ""
+    },
+    {
+        "amount": 2000,
+        "category": "bag",
+        "date": "10-06-2026"
+    },
+    {
+        "amount": 2500.0,
+        "category": "Jeans",
+        "date": "10-06-2026"
+    }
+]
