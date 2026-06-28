@@ -10,7 +10,7 @@ class ExpensesGui:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("expenses Tracker")
-        self.root.geometry("450x450")
+        self.root.geometry("450x500")
         icon = tk.PhotoImage(file="assets/logo.png")
         self.root.iconphoto(True, icon)
         self.root.config(bg="#1e1e2f")
@@ -38,29 +38,39 @@ class ExpensesGui:
         self.button_frame = tk.Frame(self.root, bg="#1e1e2f")
         self.button_frame.pack(pady=20)
 
-        self.add_button = tk.Button(self.button_frame, text="Add Expenses", command=self.add_expenses)
+        self.add_button = tk.Button(
+            self.button_frame, 
+            text="Add Expenses", 
+            command=self.add_expenses
+        )
         self.add_button.pack(pady=10)
 
-        self.view_button = tk.Button(self.button_frame, text="View Expense", command=self.view_expenses)
+        self.view_button = tk.Button(
+            self.button_frame, 
+            text="View Expense",
+            command=self.view_expenses
+        )
         self.view_button.pack(pady=10)
 
-        text_frame = tk.Frame(self.root)
-        text_frame.pack(pady=10)
-
-        scrollbar = tk.Scrollbar(text_frame)
-
-
-        self.text_area = tk.Text(
-            text_frame,
-            width=50,
-            height=10,
-            yscrollcommand=scrollbar.set
+        self.view_button = tk.Button(
+            self.button_frame, 
+            text="Delete Expense", 
+            command=self.delete_expense
         )
+        self.view_button.pack(pady=10)
 
-        scrollbar.config(command=self.text_area.yview)
+        self.total_button = tk.Button(
+            self.button_frame,
+            text="Monthly Total",
+            command=self.monthly_total
+        )
+        self.total_button.pack(pady=10)
 
-        self.text_area.pack(side=tk.LEFT)
-        scrollbar.pack(side=tk.LEFT, fill=tk.Y)
+        tk.Label(self.root, text="Expenses").pack()
+
+        self.expense_listbox = tk.Listbox(self.root, width=50)
+        self.expense_listbox.pack(pady=10)
+
 
     
     def add_expenses(self):
@@ -95,6 +105,8 @@ class ExpensesGui:
         expenses.append(expense.to_dict())
         save_expenses(expenses)
 
+        self.view_expenses()
+
         messagebox.showinfo(
             "Info",
             "expenses addad successfully"
@@ -108,24 +120,51 @@ class ExpensesGui:
         self.date_entry.insert(0, today)
 
     def view_expenses(self):
+        self.expense_listbox.delete(0, tk.END)
+
         expenses = load_expenses()
 
-        self.text_area.delete(1.0, tk.END)
-
-        if not expenses:
-            self.text_area.insert(
+        for expense in expenses:
+            self.expense_listbox.insert(
                 tk.END,
-                "No expenses found."
+                f"{expense['category']} - ₹{expense['amount']} ({expense['date']})"
             )
-            return
+            
+
+    def delete_expense(self):
+        try:
+            expenses = load_expenses()
+            selected_index=self.expense_listbox.curselection()[0]
+
+            remove=expenses.pop(selected_index)
+            save_expenses(expenses)
+
+            messagebox.showinfo("Deleted", f"{remove['category']} ₹{remove['amount']} deleted!")
+
+            self.view_expenses()
+        except IndexError:
+            messagebox.showerror("Error", "Please select an item to delete")
+
+    def monthly_total(self):
+        expenses = load_expenses()
+
+        total = 0
+
+        current_month = datetime.now().strftime("%m")
 
         for expense in expenses:
-            self.text_area.insert(
-                tk.END,
-                f"Amount: {expense['amount']}\n"
-                f"Category: {expense['category']}\n"
-                f"Date: {expense['date']}\n\n"
-            )
+            expense_month = expense["date"].split("-")[1]
+            if expense_month == current_month :
+                total += expense["amount"]
+                
+
+        messagebox.showinfo(
+            "Monthly Total",
+            f"Total Expenses: ₹{total}"
+        )
+
+
+
 
     def run(self):
         self.root.mainloop()
