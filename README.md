@@ -9,6 +9,8 @@ A desktop Expense Tracker built using Python and Tkinter. This project demonstra
 - Add Expenses
 - View Expenses
 - Save Data Using JSON
+- Delete Expenses
+- Monthly Total
 - Tkinter GUI
 - Organized Project Structure
 - Object-Oriented Programming (OOP)
@@ -69,12 +71,14 @@ python main.py
    - Select or edit the date
    - Click **Add Expense**
    - Click **View Expenses** to see all saved records
+   - Click **Delete Expenses** to delete records
+   - Click **Monthly Expenses** to see total monthly expenses
 
 ---
 
 ## Screenshots
 
-<img width="565" height="602" alt="sample" src="https://github.com/user-attachments/assets/74facc00-0b84-4b3c-813c-055d6b2ab2fb" />
+<img width="565" height="665" alt="sample" src="https://github.com/user-attachments/assets/f2164847-d410-4392-bdba-799b18f9711d" />
 
 
 ---
@@ -82,7 +86,6 @@ python main.py
 ## Future Improvements
 
 - Update Expenses Information
-- Total Expenses
 - Export Data to CSV
 - Better UI Design
 - Database Integration (SQLite)
